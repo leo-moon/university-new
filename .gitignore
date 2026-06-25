@@ -1,0 +1,6 @@
+node_modules/
+university/
+.DS_Store
+/dist/
+/.idea/
+/vite.svg
