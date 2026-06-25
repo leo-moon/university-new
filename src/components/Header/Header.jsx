@@ -1,134 +1,17 @@
-import { useState, useEffect, useRef } from 'react';
-// import './header.css';
-import dayjs from 'dayjs';
-import logo from '/logo55x55.png';
-import { styled } from 'styled-components';
-import MenuButton from '../MenuButton/MenuButton';
-import { modules } from '../../data';
-import { faculties } from '../../faculties';
+import { useState, useEffect, useRef } from "react";
+import "./header.css";
+import dayjs from "dayjs";
+import logo from "/logo55x55.png";
+import MenuButton from "../MenuButton/MenuButton";
+import { modules } from "../../data";
+import { faculties } from "../../faculties";
 
 const menuItems = modules.map((m) => ({ id: m.id, title: m.name }));
 
-const StyledHeader = styled.header`
-  height: 60px;
-  display: flex;
-  align-items: center;
-  padding: 0.5rem 2rem;
-  background-color: initial;
-  background-image: linear-gradient(
-    -225deg,
-    rgb(0, 116, 116) 0%,
-    rgb(0, 48, 104) 51%,
-    rgb(0, 116, 116) 100% 100%
-  );
-  color: rgb(1, 245, 240);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  position: relative;
-  z-index: 1;
-`;
-
-const MenuOverlay = styled.div`
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.35);
-  z-index: 1000;
-  display: flex;
-  justify-content: flex-start;
-  align-items: stretch;
-  padding: 1rem;
-`;
-
-const MenuPanel = styled.nav`
-  width: min(340px, 100%);
-  max-width: 360px;
-  background: #ffffff;
-  color: #102a43;
-  border-radius: 18px;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.18);
-  display: flex;
-  flex-direction: column;
-  padding: 1.25rem;
-  overflow: hidden;
-`;
-
-const MenuPanelHeader = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 1rem;
-`;
-
-const CloseButton = styled.button`
-  border: none;
-  background: transparent;
-  color: #102a43;
-  font-size: 1.5rem;
-  line-height: 1;
-  cursor: pointer;
-  padding: 0.25rem;
-  transition: color 0.2s ease;
-
-  &:hover {
-    color: #0b3d91;
-  }
-`;
-
-const MenuTitle = styled.h2`
-  margin: 0;
-  font-size: 1.1rem;
-  letter-spacing: 0.02em;
-`;
-
-const MenuList = styled.ul`
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: grid;
-  gap: 0.75rem;
-`;
-
-const MenuItem = styled.li`
-  border-radius: 14px;
-  background: #f8fbff;
-  box-shadow: inset 0 0 0 1px rgba(15, 23, 42, 0.05);
-`;
-
-const MenuItemButton = styled.button`
-  width: 100%;
-  padding: 1rem;
-  border: none;
-  background: transparent;
-  text-align: left;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  color: inherit;
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-`;
-
-const logoStyle = {
-  width: '45px',
-  height: '45px',
-};
-
-const FacultySelect = styled.select`
-  margin-left: 1rem;
-  padding: 0.5rem 0.75rem;
-  border-radius: 999px;
-  border: 1px solid var(--button-border);
-  background: var(--button-bg);
-  color: inherit;
-  cursor: pointer;
-  font-size: 0.95rem;
-  outline: none;
-`;
-
 export default function Header({
-  currentModuleName = 'Модуль-1',
+  currentModuleName = "Модуль-1",
   onModuleSelect = () => {},
-  currentTheme = 'light',
+  currentTheme = "light",
   onToggleTheme = () => {},
 }) {
   const [now, setNow] = useState(dayjs());
@@ -146,7 +29,7 @@ export default function Header({
 
   useEffect(() => {
     const handleKeyDown = (event) => {
-      if (event.key === 'Escape' && menuOpen) {
+      if (event.key === "Escape" && menuOpen) {
         setMenuOpen(false);
       }
     };
@@ -165,12 +48,12 @@ export default function Header({
       }
     };
 
-    document.addEventListener('keydown', handleKeyDown);
-    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener("keydown", handleKeyDown);
+    document.addEventListener("mousedown", handleClickOutside);
 
     return () => {
-      document.removeEventListener('keydown', handleKeyDown);
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("keydown", handleKeyDown);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [menuOpen]);
 
@@ -184,23 +67,19 @@ export default function Header({
 
   return (
     <>
-      <StyledHeader>
-        <div
-          style={{ marginTop: 8, marginRight: 8, marginLeft: '-16px' }}
-          ref={buttonRef}
-        >
+      <header className="header">
+        <div className="header__menu-button" ref={buttonRef}>
           <MenuButton
             onClick={() => setMenuOpen((open) => !open)}
             isOpen={menuOpen}
           />
         </div>
-        <h3 style={{ margin: 0, marginLeft: '1rem', marginRight: '0.5rem' }}>
-          {currentModuleName}
-        </h3>
+        <h3 className="header__module-title">{currentModuleName}</h3>
         <a href="https://nlu.edu.ua" target="_blank" rel="noopener noreferrer">
-          <img src={logo} alt="" style={logoStyle} />
+          <img src={logo} alt="" className="header__logo" />
         </a>
-        <FacultySelect
+        <select
+          className="header__faculty-select"
           value={faculty}
           onChange={(event) => setFaculty(event.target.value)}
           aria-label="Выбор факультета"
@@ -210,55 +89,51 @@ export default function Header({
               {item}
             </option>
           ))}
-        </FacultySelect>
-        <p style={{ marginLeft: 'auto', marginRight: '1rem' }}>
-          User: John Doe
-        </p>
+        </select>
+        <p className="header__user-info">User: John Doe</p>
         <button
           type="button"
           onClick={onToggleTheme}
-          style={{
-            marginRight: '1rem',
-            padding: '0.5rem 0.75rem',
-            borderRadius: '999px',
-            border: '1px solid rgba(255,255,255,0.65)',
-            background: 'rgba(255,255,255,0.16)',
-            color: 'inherit',
-            cursor: 'pointer',
-          }}
+          className="header__theme-toggle"
         >
-          {currentTheme === 'dark' ? 'Светлая тема' : 'Тёмная тема'}
+          {currentTheme === "dark" ? "Светлая тема" : "Тёмная тема"}
         </button>
-        <span style={{ justifyContent: 'flex-end' }}>
-          Time: {now.format('HH:mm:ss')}
-        </span>
-      </StyledHeader>
+        <span className="header__time">Time: {now.format("HH:mm:ss")}</span>
+      </header>
       {menuOpen && (
-        <MenuOverlay role="dialog" aria-modal="true" ref={menuRef}>
-          <MenuPanel>
-            <MenuPanelHeader>
-              <MenuTitle>Модули</MenuTitle>
-              <CloseButton
+        <div
+          className="menu-overlay"
+          role="dialog"
+          aria-modal="true"
+          ref={menuRef}
+        >
+          <nav className="menu-panel">
+            <div className="menu-panel__header">
+              <h2 className="menu-title">Модули</h2>
+              <button
+                type="button"
+                className="close-button"
                 onClick={() => setMenuOpen(false)}
                 aria-label="Close menu"
               >
                 ✕
-              </CloseButton>
-            </MenuPanelHeader>
-            <MenuList>
+              </button>
+            </div>
+            <ul className="menu-list">
               {modules.map((module) => (
-                <MenuItem key={module.id}>
-                  <MenuItemButton
+                <li className="menu-item" key={module.id}>
+                  <button
                     type="button"
+                    className="menu-item__button"
                     onClick={() => handleModuleSelect(module.id)}
                   >
                     <span>{module.name}</span>
-                  </MenuItemButton>
-                </MenuItem>
+                  </button>
+                </li>
               ))}
-            </MenuList>
-          </MenuPanel>
-        </MenuOverlay>
+            </ul>
+          </nav>
+        </div>
       )}
     </>
   );
