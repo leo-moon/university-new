@@ -1,0 +1,28 @@
+export const themes = {
+  light: {
+    '--page-bg': '#ffffff',
+    '--text-primary': '#102a43',
+    '--text-secondary': '#334e68',
+    '--surface': '#f5f7fa',
+    '--surface-2': '#ffffff',
+    '--border': '#e0e6ed',
+    '--surface-hover': '#e8f0f7',
+    '--surface-hover-2': '#f0f4f8',
+    '--accent': '#0b3d91',
+    '--button-bg': 'rgba(255, 255, 255, 0.16)',
+    '--button-border': 'rgba(255, 255, 255, 0.65)',
+  },
+  dark: {
+    '--page-bg': '#0f172a',
+    '--text-primary': '#f8fafc',
+    '--text-secondary': '#cbd5e1',
+    '--surface': '#111827',
+    '--surface-2': '#1f2937',
+    '--border': '#334155',
+    '--surface-hover': '#1f2937',
+    '--surface-hover-2': '#111827',
+    '--accent': '#7dd3fc',
+    '--button-bg': 'rgba(30, 64, 175, 0.24)',
+    '--button-border': 'rgba(148, 163, 184, 0.45)',
+  },
+};

@@ -1,0 +1,12 @@
+dialog {
+  width: 400px;
+  /* margin: 1rem auto 1rem auto; */
+  margin: auto;
+  margin-top: 15vh;
+  margin-bottom: 35vh;
+  /* display: flex; */
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 1rem;
+  /* z-index: 1000; */
+}

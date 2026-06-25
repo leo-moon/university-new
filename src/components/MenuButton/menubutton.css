@@ -1,0 +1,49 @@
+.menu-button {
+  border: 10px solid transparent;
+  box-sizing: border-box;
+  display: inline-block;
+  font-family: Roboto, sans-serif;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  cursor: pointer;
+  text-decoration: none;
+  margin: 0;
+  padding: 12;
+  outline: none;
+  font-size: 0;
+  font-weight: inherit;
+  position: relative;
+  overflow: visible;
+  transition: 450ms cubic-bezier(0.23, 1, 0.32, 1);
+  width: 48px;
+  height: 48px;
+  background: none;
+}
+
+.menu-button__ripple {
+  position: absolute;
+  border-radius: 50%;
+  background-color: rgba(0, 0, 0, 0.3);
+  transform: scale(0);
+  animation: ripple-animation 600ms linear;
+
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.menu-button__icon {
+  /* pointer-events: none; */
+
+  display: inline-block;
+  color: rgba(0, 0, 0, 0.87);
+  fill: rgb(255, 255, 255);
+  height: 24px;
+  width: 24px;
+  user-select: none;
+  transition: 450ms cubic-bezier(0.23, 1, 0.32, 1);
+}
