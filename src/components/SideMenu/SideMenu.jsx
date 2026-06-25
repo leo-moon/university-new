@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { styled } from 'styled-components';
+import { useState, useEffect } from "react";
+import { styled } from "styled-components";
 
 const SideMenuContainer = styled.aside`
   width: 300px;
@@ -38,7 +38,7 @@ const SubMenuList = styled.ul`
   list-style: none;
   padding: 0;
   margin: 0;
-  display: ${({ isOpen }) => (isOpen ? 'block' : 'none')};
+  display: ${({ isOpen }) => (isOpen ? "block" : "none")};
   background: var(--surface-2);
 `;
 
@@ -59,7 +59,9 @@ const SubMenuLink = styled.button`
   font-size: 0.95rem;
   color: var(--text-secondary);
   cursor: pointer;
-  transition: background-color 0.2s ease, color 0.2s ease;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
 
   &:hover {
     background-color: var(--surface-hover-2);
@@ -78,9 +80,11 @@ export default function SideMenu({ module, onSubitemClick, activeSubitemId }) {
 
   useEffect(() => {
     const initial = {};
-    module.menuItems.forEach((item) => {
-      initial[item.id] = true;
-    });
+    module.menuItems
+      .filter((item) => item.visible)
+      .forEach((item) => {
+        initial[item.id] = true;
+      });
     setExpandedItems(initial);
   }, [module]);
 
@@ -91,25 +95,29 @@ export default function SideMenu({ module, onSubitemClick, activeSubitemId }) {
     }));
   };
 
+  const visibleItems = module.menuItems.filter((item) => item.visible);
+
   return (
     <SideMenuContainer>
-      {module.menuItems.map((item) => (
+      {visibleItems.map((item) => (
         <MenuItemContainer key={item.id}>
           <MenuItemTitle onClick={() => toggleItem(item.id)}>
             <span>{item.title}</span>
-            <span>{expandedItems[item.id] ? '▾' : '▸'}</span>
+            <span>{expandedItems[item.id] ? "▾" : "▸"}</span>
           </MenuItemTitle>
           <SubMenuList isOpen={expandedItems[item.id]}>
-            {item.subitems.map((subitem) => (
-              <SubMenuItem key={subitem.id}>
-                <SubMenuLink
-                  className={activeSubitemId === subitem.id ? 'active' : ''}
-                  onClick={() => onSubitemClick(subitem)}
-                >
-                  {subitem.title}
-                </SubMenuLink>
-              </SubMenuItem>
-            ))}
+            {item.subitems
+              .filter((subitem) => subitem.visible)
+              .map((subitem) => (
+                <SubMenuItem key={subitem.id}>
+                  <SubMenuLink
+                    className={activeSubitemId === subitem.id ? "active" : ""}
+                    onClick={() => onSubitemClick(subitem)}
+                  >
+                    {subitem.title}
+                  </SubMenuLink>
+                </SubMenuItem>
+              ))}
           </SubMenuList>
         </MenuItemContainer>
       ))}

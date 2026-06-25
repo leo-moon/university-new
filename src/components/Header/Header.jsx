@@ -3,7 +3,7 @@ import "./header.css";
 import dayjs from "dayjs";
 import logo from "/logo55x55.png";
 import MenuButton from "../MenuButton/MenuButton";
-import { modules } from "../../data";
+import modules from "../../Modules";
 import { faculties } from "../../faculties";
 
 const menuItems = modules.map((m) => ({ id: m.id, title: m.name }));
@@ -16,9 +16,9 @@ export default function Header({
 }) {
   const [now, setNow] = useState(dayjs());
   const [menuOpen, setMenuOpen] = useState(false);
+  const [isClosing, setIsClosing] = useState(false);
   const [faculty, setFaculty] = useState(faculties[0]);
   const menuRef = useRef(null);
-  const buttonRef = useRef(null);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -27,51 +27,54 @@ export default function Header({
     return () => clearInterval(interval);
   }, []);
 
+  const openMenu = () => {
+    setIsClosing(false);
+    setMenuOpen(true);
+  };
+
+  const closeMenu = () => {
+    setIsClosing(true);
+    window.setTimeout(() => {
+      setMenuOpen(false);
+      setIsClosing(false);
+    }, 240);
+  };
+
   useEffect(() => {
     const handleKeyDown = (event) => {
-      if (event.key === "Escape" && menuOpen) {
-        setMenuOpen(false);
-      }
-    };
-
-    const handleClickOutside = (event) => {
-      if (!menuOpen) {
-        return;
-      }
-      if (
-        menuRef.current &&
-        !menuRef.current.contains(event.target) &&
-        buttonRef.current &&
-        !buttonRef.current.contains(event.target)
-      ) {
-        setMenuOpen(false);
+      if (event.key === "Escape" && (menuOpen || isClosing)) {
+        closeMenu();
       }
     };
 
     document.addEventListener("keydown", handleKeyDown);
-    document.addEventListener("mousedown", handleClickOutside);
 
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
-      document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [menuOpen]);
+  }, [menuOpen, isClosing]);
 
   const handleModuleSelect = (moduleId) => {
     const selected = modules.find((m) => m.id === moduleId);
     if (selected) {
       onModuleSelect(selected);
-      setMenuOpen(false);
+      closeMenu();
     }
   };
 
   return (
     <>
       <header className="header">
-        <div className="header__menu-button" ref={buttonRef}>
+        <div className="header__menu-button">
           <MenuButton
-            onClick={() => setMenuOpen((open) => !open)}
-            isOpen={menuOpen}
+            onClick={() => {
+              if (menuOpen && !isClosing) {
+                closeMenu();
+              } else {
+                openMenu();
+              }
+            }}
+            isOpen={menuOpen && !isClosing}
           />
         </div>
         <h3 className="header__module-title">{currentModuleName}</h3>
@@ -96,24 +99,28 @@ export default function Header({
           onClick={onToggleTheme}
           className="header__theme-toggle"
         >
-          {currentTheme === "dark" ? "Светлая тема" : "Тёмная тема"}
+          {currentTheme === "dark" ? "Light" : "Dark"}
         </button>
         <span className="header__time">Time: {now.format("HH:mm:ss")}</span>
       </header>
-      {menuOpen && (
+      {(menuOpen || isClosing) && (
         <div
           className="menu-overlay"
           role="dialog"
           aria-modal="true"
-          ref={menuRef}
+          onClick={closeMenu}
         >
-          <nav className="menu-panel">
+          <nav
+            className={`menu-panel ${isClosing ? "closing" : "open"}`}
+            ref={menuRef}
+            onClick={(event) => event.stopPropagation()}
+          >
             <div className="menu-panel__header">
               <h2 className="menu-title">Модули</h2>
               <button
                 type="button"
                 className="close-button"
-                onClick={() => setMenuOpen(false)}
+                onClick={closeMenu}
                 aria-label="Close menu"
               >
                 ✕
@@ -121,7 +128,15 @@ export default function Header({
             </div>
             <ul className="menu-list">
               {modules.map((module) => (
-                <li className="menu-item" key={module.id}>
+                <li
+                  className="menu-item"
+                  key={module.id}
+                  visible={
+                    module.menuItems.some((item) => item.visible)
+                      ? "true"
+                      : "false"
+                  }
+                >
                   <button
                     type="button"
                     className="menu-item__button"
